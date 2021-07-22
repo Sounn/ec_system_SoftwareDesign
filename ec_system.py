@@ -1,16 +1,18 @@
+import os
 import sqlite3
 con = sqlite3.connect('example.db')
 c = con.cursor()
 
-#
-c.execute("""
-  CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name STRING,
-    email STRING,
-    age INTEGER
-  )
-""")
+path = '/Users/somahisai/Desktop/ec_system/example.db'
+if not (os.path.isfile(path)):
+  c.execute("""
+    CREATE TABLE users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name STRING,
+      email STRING,
+      age INTEGER
+    )
+  """)
 
 
 while(True):
@@ -43,6 +45,20 @@ while(True):
     age = input("input - age:")
     print('\nCREATE USER name {}, email {}, age {}.\n'.format(name,email,age))
     c.execute("INSERT INTO users(name, email, age) VALUES(?, ?, ?)",(name , email, age))
+    con.commit()
+
+  #03. User Edit page. 
+  if num == '2':
+    print('\n=== USER EDIT PAGE ===\n')
+    id = input("EDIT USER ID: ?")
+    c.execute("SELECT * FROM users WHERE id = ?", id)
+    for row in c:
+      print('\nEDIT TARGET USER INFO: name {}, email {}, age {}.\n'.format(str(row[1]), str(row[2]), str(row[3])))
+    name = input("edit - name: ?")
+    email = input("edit - email: ?")
+    age = input("edit - age: ?")
+    print('\nEDIT USER name {}, email {}, age {}.\n'.format(name,email,age))
+    c.execute("UPDATE users SET name=?,email=?,age=? WHERE id = ?",(name , email, age, id))
     con.commit()
 
 
