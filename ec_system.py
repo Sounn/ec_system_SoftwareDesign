@@ -1,3 +1,18 @@
+import sqlite3
+con = sqlite3.connect('example.db')
+c = con.cursor()
+
+#
+c.execute("""
+  CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name STRING,
+    email STRING,
+    age INTEGER
+  )
+""")
+
+
 while(True):
   #01 Exec page
   print("""
@@ -18,8 +33,17 @@ while(True):
     exec:
   """)
 
-  num = input('exec:')
+  num = input('exec:?')
 
+  #02. User Create page.
+  if num == '1':
+    print('\n=== USER CRAETE PAGE ===\n')
+    name = input("input - name: ?")
+    email = input("input - email: ?")
+    age = input("input - age:")
+    print('\nCREATE USER name {}, email {}, age {}.\n'.format(name,email,age))
+    c.execute("INSERT INTO users(name, email, age) VALUES(?, ?, ?)",(name , email, age))
+    con.commit()
 
 
   #13. Exit page.
