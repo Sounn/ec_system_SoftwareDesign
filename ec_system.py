@@ -61,6 +61,15 @@ while(True):
     c.execute("UPDATE users SET name=?,email=?,age=? WHERE id = ?",(name , email, age, id))
     con.commit()
 
+  #04. User Delete page.
+  if num == '3':
+    print('\n=== USER DELETE PAGE ===\n')
+    id = input("DELETE USER ID: ?")
+    c.execute("SELECT * FROM users WHERE id = ?", id)
+    for row in c:
+      print('\nDELETE TARGET USER INFO: name {}, email {}, age {}.\n'.format(str(row[1]), str(row[2]), str(row[3])))
+    c.execute("DELETE FROM users WHERE id = ?",(id))
+    con.commit()
 
   #13. Exit page.
   if num == '12':
