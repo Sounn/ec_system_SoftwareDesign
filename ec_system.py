@@ -71,6 +71,13 @@ while(True):
     c.execute("DELETE FROM users WHERE id = ?",(id))
     con.commit()
 
+  #05. User List page.
+  if num == '4':
+    print('\n=== USER LIST PAGE ===\n')
+    c.execute("SELECT * FROM users")
+    for row in c:
+      print('ID {}, name {}, email {}, age {}.'.format(str(row[0]),str(row[1]), str(row[2]), str(row[3])))
+
   #13. Exit page.
   if num == '12':
     print("""
