@@ -1,0 +1,10 @@
+sqlite3を開く
+sqlite3 /Users/somahisai/Desktop/ec_system/example.db
+
+テーブル一覧
+.table
+
+テーブルの中身確認
+select * from table名;
+
+select * from users;
