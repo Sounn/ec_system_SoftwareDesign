@@ -12,7 +12,15 @@ if not (os.path.isfile(path)):
       email STRING,
       age INTEGER
     )
-  """)
+  """)# create users table
+  c.execute("""
+    CREATE TABLE items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      code STRING,
+      name STRING,
+      price INTEGER
+    )
+  """)# create items table
 
 
 while(True):
@@ -77,6 +85,16 @@ while(True):
     c.execute("SELECT * FROM users")
     for row in c:
       print('ID {}, name {}, email {}, age {}.'.format(str(row[0]),str(row[1]), str(row[2]), str(row[3])))
+
+  #06. Item Create page.
+  if num == '5':
+    print('\n=== ITEM CRAETE PAGE ===\n')
+    name = input("input - name: ?")
+    code = input("input - code: ?")
+    price = input("input - price: ?")
+    print('\nCREATE ITEM name {}, code {}, price {}.\n'.format(name,code,price))
+    c.execute("INSERT INTO items(name, code, price) VALUES(?, ?, ?)",(name , code, price))
+    con.commit()
 
   #13. Exit page.
   if num == '12':
