@@ -95,6 +95,20 @@ while(True):
     print('\nCREATE ITEM name {}, code {}, price {}.\n'.format(name,code,price))
     c.execute("INSERT INTO items(name, code, price) VALUES(?, ?, ?)",(name , code, price))
     con.commit()
+  
+  #07. Item Edit page.
+  if num == '6':
+    print('\n=== ITEM EDIT PAGE ===\n')
+    id = input("EDIT ITEM ID: ?")
+    c.execute("SELECT * FROM items WHERE id = ?", id)
+    for row in c:
+      print('\nEDIT TARGET ITEM INFO: name {}, code {}, price {}.\n'.format(str(row[1]), str(row[2]), str(row[3])))
+    name = input("edit - name: ?")
+    code = input("edit - code: ?")
+    price = input("edit - price: ?")
+    print('\nEDIT ITEM name {}, code {}, price {}.\n'.format(name,code,price))
+    c.execute("UPDATE items SET name=?,code=?,price=? WHERE id = ?",(name , code, price, id))
+    con.commit()
 
   #13. Exit page.
   if num == '12':
