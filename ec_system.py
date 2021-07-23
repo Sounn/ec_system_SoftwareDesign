@@ -110,6 +110,16 @@ while(True):
     c.execute("UPDATE items SET name=?,code=?,price=? WHERE id = ?",(name , code, price, id))
     con.commit()
 
+  #08. Item Delete page.
+  if num == '7':
+    print('\n=== ITEM DELETE PAGE ===\n')
+    id = input("DELETE ITEM ID: ?")
+    c.execute("SELECT * FROM items WHERE id = ?", id)
+    for row in c:
+      print('\nDELETE TARGET ITEM INFO: name {}, code {}, price {}.\n'.format(str(row[1]), str(row[2]), str(row[3])))
+    c.execute("DELETE FROM items WHERE id = ?",(id))
+    con.commit()
+
   #13. Exit page.
   if num == '12':
     print("""
