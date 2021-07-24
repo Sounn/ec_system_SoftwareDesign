@@ -119,6 +119,13 @@ while(True):
       print('\nDELETE TARGET ITEM INFO: name {}, code {}, price {}.\n'.format(str(row[1]), str(row[2]), str(row[3])))
     c.execute("DELETE FROM items WHERE id = ?",(id))
     con.commit()
+  
+  #09. Item List page.
+  if num == '8':
+    print('\n=== ITEM LIST PAGE ===\n')
+    c.execute("SELECT * FROM items")
+    for row in c:
+      print('ID {}, name {}, code {}, price {}.'.format(str(row[0]),str(row[1]), str(row[2]), str(row[3])))
 
   #13. Exit page.
   if num == '12':
