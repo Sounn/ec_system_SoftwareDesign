@@ -171,6 +171,17 @@ while(True):
       print('ID:{} USER_NAME:{} USER_EMAIL:{} ITEM_NAME{} ITEM_PRICE {}'
       .format(str(purchase[0]), str(user[1]), str(user[2]), str(item[1]), str(item[3])))
 
+  #12. Total Amount Aggregation Mode page.
+  if(num == '11'):
+    print('\n=== TOTAL AMOUNT AGGREGATION MODE PAGE ===\n')
+    c.execute("SELECT * FROM purchase_histories")
+    histories = c.fetchall()
+    total_amount = 0
+    for purchase in histories:
+      c.execute("SELECT * FROM items WHERE id = ?", (purchase[2],))
+      item = c.fetchone()
+      total_amount += item[3]
+    print('TOTAL AMOUNT: {} yen.'.format(str(total_amount)))
 
   #13. Exit page.
   if num == '12':
