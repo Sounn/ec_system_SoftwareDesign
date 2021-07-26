@@ -1,10 +1,9 @@
 import os
 import sqlite3
-con = sqlite3.connect('example.db')
-c = con.cursor()
-
 path = '/Users/somahisai/Desktop/ec_system/example.db'
 if not (os.path.isfile(path)):
+  con = sqlite3.connect('example.db')
+  c = con.cursor()
   c.execute("""
     CREATE TABLE users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,7 +20,17 @@ if not (os.path.isfile(path)):
       price INTEGER
     )
   """)# create items table
+  c.execute("""
+    CREATE TABLE purchase_histories(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    item_id INTEGER
+    )
+  """)# create purchase_histories table
 
+
+con = sqlite3.connect('example.db')
+c = con.cursor()
 
 while(True):
   #01 Exec page
@@ -55,7 +64,7 @@ while(True):
     c.execute("INSERT INTO users(name, email, age) VALUES(?, ?, ?)",(name , email, age))
     con.commit()
 
-  #03. User Edit page. 
+  #03. User Edit page.
   if num == '2':
     print('\n=== USER EDIT PAGE ===\n')
     id = input("EDIT USER ID: ?")
@@ -95,7 +104,7 @@ while(True):
     print('\nCREATE ITEM name {}, code {}, price {}.\n'.format(name,code,price))
     c.execute("INSERT INTO items(name, code, price) VALUES(?, ?, ?)",(name , code, price))
     con.commit()
-  
+
   #07. Item Edit page.
   if num == '6':
     print('\n=== ITEM EDIT PAGE ===\n')
@@ -119,13 +128,34 @@ while(True):
       print('\nDELETE TARGET ITEM INFO: name {}, code {}, price {}.\n'.format(str(row[1]), str(row[2]), str(row[3])))
     c.execute("DELETE FROM items WHERE id = ?",(id))
     con.commit()
-  
+
   #09. Item List page.
   if num == '8':
     print('\n=== ITEM LIST PAGE ===\n')
     c.execute("SELECT * FROM items")
     for row in c:
       print('ID {}, name {}, code {}, price {}.'.format(str(row[0]),str(row[1]), str(row[2]), str(row[3])))
+
+  #10. Item Buy Mode page.
+  if num == '9':
+    print('\n === ITEM BUY MODE PAGE ===\n')
+    user_id = input("USER ID: ?")
+    c.execute("SELECT * FROM users WHERE id = ?", user_id)
+    user = c.fetchone()
+    item_code = input("BUY ITEM CODE: ?")
+    c.execute("SELECT * FROM items WHERE code = ?", (item_code,))
+    item = c.fetchone()
+    print('\nUSER INFO: NAME {}, EMAIL {}, AGE {}.'.format(str(user[1]), str(user[2]), str(user[3])))
+    print('ITEM INFO: NAME {}, CODE {}, PRICE {}.'.format(str(item[2]), str(item[1]), str(item[3])))
+    flag = input("\nCONFIRM BUY (Y/n):?\n")
+    if flag == 'N' or flag == 'n':
+      print('no')
+    else:
+      c.execute("INSERT INTO purchase_histories(user_id, item_id) values (?, ?)",(user[0],item[0]))
+      con.commit()
+      c.execute("SELECT id FROM purchase_histories ORDER BY id DESC LIMIT 1")
+      purchase_history = c.fetchone()
+      print('ITEM PURCHASE ID {} USER_ID {} ITEM_ID {}'.format(str(purchase_history[0]), str(user[0]), str(item[0])))
 
   #13. Exit page.
   if num == '12':
