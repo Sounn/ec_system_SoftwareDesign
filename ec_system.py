@@ -157,6 +157,21 @@ while(True):
       purchase_history = c.fetchone()
       print('ITEM PURCHASE ID {} USER_ID {} ITEM_ID {}'.format(str(purchase_history[0]), str(user[0]), str(item[0])))
 
+  #11. Item Buy Histories Mode page.
+  if num == '10':
+    print('\n=== ITEM BUY HISTORIES MODE PAGE ===\n')
+    c.execute("SELECT * FROM (SELECT * FROM purchase_histories ORDER BY id DESC LIMIT 10) ORDER BY id ASC")
+    histories = c.fetchall()
+    print('PURCHASE HISTORY INFO {} RECORDS.\n'.format(len(histories)))
+    for purchase in histories:
+      c.execute("SELECT * FROM users WHERE id = ?", (purchase[1],))
+      user = c.fetchone()
+      c.execute("SELECT * FROM items WHERE id = ?", (purchase[2],))
+      item = c.fetchone()
+      print('ID:{} USER_NAME:{} USER_EMAIL:{} ITEM_NAME{} ITEM_PRICE {}'
+      .format(str(purchase[0]), str(user[1]), str(user[2]), str(item[1]), str(item[3])))
+
+
   #13. Exit page.
   if num == '12':
     print("""
